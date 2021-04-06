@@ -36,9 +36,6 @@ function reducer(state, action) {
 
 export default function useFetchJobs(params, page) {
   const [state, dispatch] = useReducer(reducer, { jobs: [], loading: true });
-
-  // TIL useEffect is blocking (after the 1st render anyway)
-  // https://aravindballa.com/writings/non-blocking-ui-react/
   useEffect(() => {
     const cancelToken1 = axios.CancelToken.source();
     dispatch({ type: ACTIONS.MAKE_REQUEST });
@@ -49,6 +46,7 @@ export default function useFetchJobs(params, page) {
       })
       .then((res) => {
         dispatch({ type: ACTIONS.GET_DATA, payload: { jobs: res.data } });
+        console.log('mundo');
       })
       .catch((err) => {
         if (axios.isCancel(err)) return;
@@ -66,6 +64,7 @@ export default function useFetchJobs(params, page) {
           type: ACTIONS.UPDATE_HAS_NEXT_PAGE,
           payload: { hasNextPage: res.data.length !== 0 },
         });
+        console.log('hola');
       })
       .catch((err) => {
         if (axios.isCancel(err)) return;
